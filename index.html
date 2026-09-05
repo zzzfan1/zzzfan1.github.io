@@ -143,6 +143,35 @@
   .l9row-clearance{font-size:10.5px;letter-spacing:1px;padding:2px 7px;border:1px solid currentColor;color:var(--amber);}
   .l9row-pass{margin-top:6px;font-size:11.5px;color:var(--text-dim);}
   .l9row-role{margin-top:2px;font-size:12.5px;color:var(--text);}
+
+  .l9-subhead{margin-top:6px;padding:14px 16px 4px;font-size:12.5px;letter-spacing:1.5px;
+    color:var(--magenta);border-top:1px solid var(--line);}
+  #l9CaseList{padding:6px 16px 24px;display:flex;flex-direction:column;gap:8px;}
+  .l9case{border:1px solid var(--magenta);background:var(--bg-raised);padding:10px 12px;cursor:pointer;}
+  .l9case:active{background:rgba(255,63,158,.08);}
+  .l9case-id{font-size:11px;letter-spacing:1px;color:var(--magenta);}
+  .l9case-title{margin-top:5px;font-size:14px;color:var(--text);}
+  .l9case-brief{margin-top:5px;font-size:11.5px;color:var(--text-dim);line-height:1.4;}
+  #l9CaseDetail .back{border-color:var(--magenta);color:var(--magenta);margin:16px 16px 0;}
+  #l9CaseDetail .detail-body{padding:16px;}
+  #l9DeathList{padding:6px 16px 24px;display:flex;flex-direction:column;gap:8px;}
+  .l9death{border:1px solid var(--red);background:var(--bg-raised);padding:10px 12px;cursor:pointer;}
+  .l9death:active{background:rgba(225,57,71,.08);}
+  .l9death-id{font-size:11px;letter-spacing:1px;color:var(--red);}
+  .l9death-title{margin-top:5px;font-size:14px;color:var(--text);}
+  .l9death-brief{margin-top:5px;font-size:11.5px;color:var(--text-dim);line-height:1.4;}
+  #l9TruthList{padding:6px 16px 24px;display:flex;flex-direction:column;gap:8px;}
+  .l9truth{border:1px solid var(--amber);background:var(--bg-raised);padding:10px 12px;cursor:pointer;}
+  .l9truth:active{background:rgba(242,183,60,.08);}
+  .l9truth-row{display:flex;gap:10px;align-items:flex-start;}
+  .l9truth-icon{flex:none;width:34px;height:34px;color:var(--amber);}
+  .l9truth-icon svg{width:100%;height:100%;display:block;}
+  .l9truth-text{flex:1;min-width:0;}
+  .l9truth-id{font-size:11px;letter-spacing:1px;color:var(--amber);}
+  .l9truth-title{margin-top:5px;font-size:14px;color:var(--text);}
+  .l9truth-brief{margin-top:5px;font-size:11.5px;color:var(--text-dim);line-height:1.4;}
+  .l9d-icon{width:64px;height:64px;color:var(--amber);margin-bottom:10px;}
+  .l9d-icon svg{width:100%;height:100%;display:block;}
 </style>
 </head>
 <body>
@@ -220,7 +249,7 @@
       <div class="who">OPERATOR: <span id="whoName"></span></div>
     </div>
     <button id="l5Btn" onclick="openSecret()" style="display:none;border-color:#2a0010;background:#160709;color:var(--magenta);margin-right:6px;">L5 BRIEFING</button>
-    <button id="l9Btn" onclick="openL9()" style="display:none;border-color:#062820;background:#081312;color:var(--teal);margin-right:6px;">L9 ROSTER</button>
+    <button id="l9Btn" onclick="openL9()" style="display:none;border-color:#062820;background:#081312;color:var(--teal);margin-right:6px;">L9 DOCUMENTS</button>
     <button onclick="logout()">LOG OUT</button>
   </header>
 
@@ -262,10 +291,26 @@
   <div class="l9-head">
     <button class="back" onclick="closeL9()">‹ BACK TO ARCHIVE</button>
     <div class="l9-tag">LEVEL 9 CLEARANCE REQUIRED</div>
-    <div class="l9-title">FULL OPERATOR ROSTER</div>
-    <div class="l9-note">All active credentials, clearance levels, and assignments. This list does not change between sessions.</div>
+    <div class="l9-title">L9 DOCUMENTS</div>
+    <div class="l9-note">All active credentials, extinction-level projections, and black-budget program files. This archive does not change between sessions.</div>
   </div>
-  <div id="l9List"></div>
+  <div id="l9Main">
+    <div class="l9-subhead" style="border-top:none;">OPERATOR ROSTER</div>
+    <div id="l9List"></div>
+    <div class="l9-subhead">OMEGA CASE FILES — EXTINCTION-LEVEL PROJECTIONS</div>
+    <div class="l9-note" style="padding:0 16px 10px;">Compiled from surviving Precursor Bureau archives. Distribution beyond Level 9 is a terminable offense.</div>
+    <div id="l9CaseList"></div>
+    <div class="l9-subhead" style="color:var(--red);">PROJECT D.E.A.T.H.</div>
+    <div class="l9-note" style="padding:0 16px 10px;">Destroy Ethereals And The Hollows. Unsanctioned by mainline Bureau charter. Existence of this program is itself classified.</div>
+    <div id="l9DeathList"></div>
+    <div class="l9-subhead" style="color:var(--amber);">THE TRUTH</div>
+    <div class="l9-note" style="padding:0 16px 10px;">Recovered from a Global Anomaly Bureau archive fragment. Authenticity unconfirmed. Distribution restricted regardless.</div>
+    <div id="l9TruthList"></div>
+  </div>
+  <div id="l9CaseDetail" style="display:none;">
+    <button class="back" onclick="closeL9CaseDetail()">‹ BACK TO L9</button>
+    <div class="detail-body" id="l9dBody"></div>
+  </div>
 </div>
 
 <script>
@@ -731,6 +776,11 @@ function renderL9(){
 function openL9(){
   if(currentClearance < 9) return;
   renderL9();
+  renderL9CaseList();
+  renderL9DeathList();
+  renderL9TruthList();
+  document.getElementById('l9Main').style.display='block';
+  document.getElementById('l9CaseDetail').style.display='none';
   document.getElementById('app').style.display='none';
   document.getElementById('detail').style.display='none';
   document.getElementById('secret').style.display='none';
@@ -740,6 +790,600 @@ function openL9(){
 function closeL9(){
   document.getElementById('l9').style.display='none';
   document.getElementById('app').style.display='block';
+}
+
+/* ============================================================
+   OMEGA CASE FILES — extinction-level projections (Level 9 only)
+   ============================================================ */
+const OMEGA_FILES = [
+  {
+    id: "OMEGA-01",
+    title: "The Lunar Fracture",
+    brief: "A section of the moon's surface does not match any recorded impact and predates the first documented Hollow.",
+    body: `Precursor Bureau astronomical surveys logged a fracture spanning roughly one-ninth of the visible lunar surface, its edges too regular for impact damage and too old to date against any catalogued event. The first confirmed Hollow bloom on record occurred within four years of the fracture's earliest known observation. No causal link has ever been proven. No one senior enough to rule one out has been willing to say so on record.`
+  },
+  {
+    id: "OMEGA-02",
+    title: "The First Wave",
+    brief: "New Eridu is a rebuilt successor to a prior civilization erased by a single Hollow bloom event.",
+    body: `Beneath the Foundry Docks, survey teams have mapped the compacted remains of an earlier city, structurally advanced beyond anything currently standing, ended in what Precursor records call the First Wave: a Hollow bloom that did not stay contained to a district or a city, but spread continent-wide within a single season. Population estimates for the era before the First Wave run, conservatively, at forty times New Eridu's current census. No account of how the bloom was eventually stopped has survived. It may not have been stopped so much as it simply ran out of somewhere to go.`
+  },
+  {
+    id: "OMEGA-03",
+    title: "Terminus Assessment",
+    brief: "An internal actuarial model projects total loss of habitable land; the projected date has moved earlier every year it's been run.",
+    body: `The Terminus Assessment is recalculated annually from Hollow bloom frequency, suppression ring capacity, and habitable land loss. Every recalculation since Bureau records began has moved the projected date of total habitable land loss earlier than the year before, never later, regardless of containment successes claimed in the same period. The current model's authors attach a standing note to each year's report: the model has never once needed to be revised in the optimistic direction, and no one has proposed a reason why this year would be different.`
+  },
+  {
+    id: "OMEGA-04",
+    title: "The Silent Cities",
+    brief: "A standing list of settlements that stopped transmitting and were never re-established.",
+    body: `The Bureau maintains a registry of eleven settlements, once comparable in size to New Eridu, that ceased all transmission within recorded history and were never reoccupied. Relief and survey expeditions were mounted for the first four; none returned a full report, and none were sent for the remaining seven. The registry's official classification for all eleven reads simply: "status presumed consistent with First Wave outcomes." No further expeditions are currently planned or funded.`
+  },
+  {
+    id: "OMEGA-05",
+    title: "Ethereal Signal Recurrence",
+    brief: "A structured signal tied to lunar phase precedes measurable surges in global Hollow activity.",
+    body: `A repeating structured signal, first isolated by Precursor Bureau listening posts, recurs on a cycle matched almost exactly to the moon's phase rather than any terrestrial pattern. In every instance where the signal's peak has been cross-referenced against global Hollow telemetry, a measurable surge in bloom frequency follows within roughly seventy-two hours. The signal has never been decoded. It has also never missed a cycle.`
+  },
+  {
+    id: "OMEGA-06",
+    title: "The Bureau's True Mandate",
+    brief: "Internal founding language defines the Bureau's purpose as managed decline, not eventual victory.",
+    body: `Public messaging holds that the Bureau's mission is containment leading to eventual eradication of Hollow activity. The original founding language, still technically in force, defines the mandate differently: "to preserve the maximum viable human population for the maximum sustainable duration." No version of the charter, at any clearance level the Bureau has been willing to show a Level 9 operator, includes the word "victory." It was never on the table. It was never meant to be.`
+  }
+];
+
+function renderL9CaseList(){
+  const wrap = document.getElementById('l9CaseList');
+  wrap.innerHTML = '';
+  OMEGA_FILES.forEach(e=>{
+    const card = document.createElement('div');
+    card.className = 'l9case';
+    card.onclick = ()=>openL9CaseDetail(e.id);
+    card.innerHTML = `
+      <div class="l9case-id">${e.id}</div>
+      <div class="l9case-title">${e.title}</div>
+      <div class="l9case-brief">${e.brief}</div>`;
+    wrap.appendChild(card);
+  });
+}
+
+const DEATH_FILES = [
+  {
+    id: "D.E.A.T.H.-01",
+    title: "Authorization",
+    brief: "An unsanctioned offensive program was greenlit off the books after the Terminus Assessment leaked internally.",
+    body: `When early drafts of the Terminus Assessment circulated beyond their intended distribution, a small group of senior officials concluded that "managed decline" was not a mandate worth surviving under. Project D.E.A.T.H. — Destroy Ethereals And The Hollows — was authorized without a charter amendment, funded by diverting Terminus contingency reserves, and staffed entirely through personal loyalty rather than standard assignment. No signature on the authorizing memo matches a name in the current organizational chart.`
+  },
+  {
+    id: "D.E.A.T.H.-02",
+    title: "The Eradication Model",
+    brief: "A theoretical method for permanently collapsing a Hollow instance rather than merely containing it.",
+    body: `Standard containment treats a Hollow as a stable feature to be isolated, not removed. The Eradication Model instead proposes forcing a Hollow's boundary to collapse inward on itself by flooding it with Ether drawn from the suppression ring described elsewhere in this archive — the same ring publicly justified as a safety measure. Modeling suggests a successful collapse destroys the Hollow permanently. It also suggests a failed one releases years of suppressed Ether in a single event, with consequences the model's authors decline to project past the first six hours.`
+  },
+  {
+    id: "D.E.A.T.H.-03",
+    title: "First Field Test",
+    brief: "The Eradication Model's first live test produced an ambiguous result and unrecorded personnel losses.",
+    body: `The first live test of the Eradication Model targeted a minor, well-documented Hollow instance selected for its isolation from populated districts. The instance did collapse. Instrumentation also recorded a secondary Ether discharge the model had not predicted, in a radius larger than cleared for the test. Three field personnel present are not accounted for in any subsequent Bureau roster. The after-action report calls the test "a qualified success requiring further calibration" and does not use the word casualties.`
+  },
+  {
+    id: "D.E.A.T.H.-04",
+    title: "The Moon Directive",
+    brief: "Project leadership proposed addressing the Ethereal presence at its source rather than case-by-case on Earth.",
+    body: `Citing the Lunar Fracture and the Ethereal Signal Recurrence documented elsewhere in this archive, Project D.E.A.T.H. leadership drafted a proposal to treat the moon itself as the true containment target, rather than each Hollow it seeds. The directive does not specify what "addressing" the source would involve, and no feasibility study is attached. It has not been approved. It has also, notably, never been formally rejected — it remains open on the project's internal docket, unresolved rather than closed.`
+  },
+  {
+    id: "D.E.A.T.H.-05",
+    title: "Containment of the Containers",
+    brief: "Mainline Bureau leadership has begun quietly discussing whether Project D.E.A.T.H. itself now needs to be contained.",
+    body: `Following the undisclosed radius of the first field test, a small number of mainline Bureau officials — outside the project entirely — have begun raising, off the record, whether Project D.E.A.T.H. has become a greater near-term risk than the Hollows it was built to destroy. No shutdown order has been drafted. No one has proposed one out loud. The project continues to operate on Terminus contingency funds that, on paper, still do not officially exist.`
+  }
+];
+
+function renderL9DeathList(){
+  const wrap = document.getElementById('l9DeathList');
+  wrap.innerHTML = '';
+  DEATH_FILES.forEach(e=>{
+    const card = document.createElement('div');
+    card.className = 'l9death';
+    card.onclick = ()=>openL9CaseDetail(e.id);
+    card.innerHTML = `
+      <div class="l9death-id">${e.id}</div>
+      <div class="l9death-title">${e.title}</div>
+      <div class="l9death-brief">${e.brief}</div>`;
+    wrap.appendChild(card);
+  });
+}
+
+const THE_TRUTH = [
+  {
+    id: "TRUTH-01",
+    title: "The Global Anomaly Bureau",
+    brief: "Before regional restructuring, the Bureau operated worldwide under a single name: the Global Anomaly Bureau.",
+    body: `Prior to what internal records refer to only as "the Divergence," the organization now known regionally as the Eridian Anomaly Bureau operated as a single, centrally commanded body: the Global Anomaly Bureau, or GAB. The restructuring into semi-autonomous regional bureaus was officially framed as an efficiency measure. It followed an internal event after which GAB headquarters ceased centralized communication with several regional stations entirely. The Eridian Anomaly Bureau is, as far as any Level 9 operator has been able to confirm, the only regional bureau still receiving scheduled contact from the original GAB command structure — though that contact has grown less frequent every year since.`
+  },
+  {
+    id: "TRUTH-02",
+    title: "The Fifty",
+    brief: "GAB's unified global ledger listed exactly fifty anomalies significant enough for direct central oversight.",
+    body: `Separate from the thousands of minor, regionally handled cases like those in the standard EAB archive, the Global Anomaly Bureau maintained a single unified containment ledger listing exactly fifty anomalies designated significant enough to require direct global oversight. Each was assigned a GAB number rather than a regional one. Of the fifty, only a handful have ever been referenced in any material that reached Eridian hands. The remainder appear in the surviving ledger fragment by number only, with no accompanying file — and no confirmation of whether they are still contained, or still exist to be contained at all.`
+  },
+  {
+    id: "TRUTH-03",
+    title: "GAB-001: The First Ethereal",
+    brief: "The lowest designation in the Global ledger — believed to be the anomaly that prompted the Bureau's founding.",
+    body: `GAB-001 predates the Bureau's own founding charter and is widely believed, though never officially confirmed, to be the anomaly that prompted the charter's drafting in the first place. Surviving fragments describe it as the first Ethereal ever directly observed and documented, rather than inferred from Hollow activity alone. Its containment file consists of a single line: location classified, status unconfirmed, do not reclassify without Level 12 authorization. No Level 12 clearance has ever been acknowledged to exist by any regional bureau, including this one.`
+  },
+  {
+    id: "TRUTH-04",
+    title: "GAB-014: The Old Man",
+    brief: "An elderly human figure sighted at eleven separate global bloom sites, always alone, always already gone.",
+    body: `GAB-014 was logged only as an elderly human figure, sighted independently at eleven separate Hollow bloom sites across four continents. In every recorded instance, the figure was already present before response teams arrived and gone before recovery footage could be reviewed in full. No containment protocol was ever filed beyond a standing instruction: do not approach, do not detain, log time and location only. Sightings consistent with the description continue to be reported. No two logged appearances have ever occurred within five hundred kilometers of each other on the same day.`
+  },
+  {
+    id: "TRUTH-05",
+    title: `GAB-022: "God"`,
+    brief: "A designation the Bureau did not choose, recorded from a single cut-short field transmission.",
+    body: `The Bureau did not select this designation's colloquial name. It was transcribed from a single field transmission, cut short mid-broadcast, in which the responding operator repeated the word three times before contact was lost permanently. No image, coordinate, or physical description of GAB-022 has ever been logged. Its containment file is otherwise empty, save for a recurring quarterly entry, unsigned, stating only that it remains where it was found.`
+  },
+  {
+    id: "TRUTH-06",
+    title: "GAB-035: Virus-Gamma",
+    brief: "A self-propagating pattern that spreads through Ether-monitoring instrumentation rather than any physical Hollow.",
+    body: `Unlike most entries in the Global ledger, GAB-035 was never a location-bound phenomenon. First identified spreading through Ether-monitoring instrumentation itself, containment attempts focused on air-gapping affected sensor networks across every regional bureau. Several regions, including this one, report residual readings consistent with Virus-Gamma appearing in supposedly disconnected equipment decades later. It remains the only entry in the ledger with no known origin point and no confirmed end point.`
+  },
+  {
+    id: "TRUTH-07",
+    title: "GAB-050: The Sword of the Seven",
+    brief: "A single physical object recovered from the only recorded case of a Hollow collapsing entirely on its own.",
+    body: `The highest-numbered entry in the original Global ledger, added shortly before the Divergence. GAB-050 was recovered from a Hollow instance that collapsed entirely without external intervention — the only recorded case of unassisted Hollow collapse in Bureau history. The recovered object, a single physical artifact retrieved intact, was assigned to seven independent recovery teams for isolated study, each unaware of the others' findings. Whether the teams' results were ever cross-referenced by anyone above Level 9 has never been clarified to anyone at Level 9.`
+  },
+  {
+    id: "TRUTH-08",
+    title: "GAB-003: Virus-Alpha",
+    brief: "The original strain in the Virus family, spreading through living hosts rather than instrumentation.",
+    body: `Predating GAB-035 by an interval the surviving ledger does not specify, GAB-003 was the first anomaly later classified into what the Global ledger calls the Virus family — a self-propagating pattern with no fixed physical form. Unlike its later instrumentation-borne variant, Virus-Alpha spreads through direct contact with living hosts, with incubation periods ranging from hours to years and no consistent correlation to exposure duration. Containment protocol for GAB-003 was never fully implemented. The ledger lists its status simply as "ongoing, low-priority, self-limiting" — a classification that has not been revised in over four decades.`
+  },
+  {
+    id: "TRUTH-09",
+    title: "GAB-010: The Void Touched",
+    brief: "A standing designation for an unknown number of individuals altered by prolonged, undocumented Hollow exposure.",
+    body: `GAB-010 is not a single entity but a standing designation applied to individuals exhibiting a specific, consistent set of changes following prolonged and otherwise unremarkable Hollow exposure — changes the Global ledger declines to describe beyond the phrase "no longer fully returned." The total number of confirmed Void Touched individuals has never been published. Regional bureaus are instructed to report any suspected case directly to Global oversight and take no independent containment action — an instruction that predates the existence of any Global oversight body still known to respond.`
+  },
+  {
+    id: "TRUTH-10",
+    title: "GAB-012: The Door To Infinity",
+    brief: "A recovered doorway that opens, from either side, onto a space with no measurable far boundary.",
+    body: `Recovered from an otherwise unremarkable structure with no recorded Hollow activity prior to its discovery, GAB-012 is a single doorway that opens — regardless of which side it is approached from — onto a space Bureau instruments have never been able to measure a far wall for. Objects passed through do not return. No living subject has ever been authorized to pass through and return; the ledger notes exactly one unauthorized attempt, the outcome of which is recorded as nothing more than "attempt logged."`
+  },
+  {
+    id: "TRUTH-11",
+    title: "GAB-005: Virus-Delta",
+    brief: "A variant of the Virus family that propagates through duplicated text rather than hosts or instrumentation.",
+    body: `Virus-Delta was first identified spreading through duplicated documents — printed containment reports, in particular — with each copy carrying the pattern forward regardless of transcription accuracy. Destroying a carrier document does not eliminate the pattern if even a partial reading was made beforehand; the ledger notes at least one instance in which a summary of GAB-005's own containment file became a secondary carrier. Standard procedure for regional bureaus encountering a suspected Delta carrier is to log the document's existence, not its contents.`
+  },
+  {
+    id: "TRUTH-12",
+    title: "GAB-006: MTF-001ε",
+    brief: "A field response unit appearing in Global dispatch logs with no corresponding roster, chain of command, or founding order.",
+    body: `GAB-006 is not, by any definition, an anomaly of the kind catalogued elsewhere in the Global ledger — it is a listed mobile task force, MTF-001ε, that appears in dispatch logs responding to incidents across multiple regions, sometimes simultaneously, with no personnel roster, funding line, or founding order on record anywhere in Bureau administration. Regional bureaus that have logged contact with 001ε describe its members as cooperative, competent, and unfamiliar to every other regional unit present. It is catalogued under the Global ledger, rather than as a standard task force, because no one has been able to establish who it answers to.`
+  },
+  {
+    id: "TRUTH-13",
+    title: "GAB-007: Virus-Theta",
+    brief: "A silent variant of the Virus family, detected only through the total absence of an expected background reading.",
+    body: `Unlike its counterparts, Virus-Theta produces no positive reading on any Bureau instrument. It was identified only when a routine calibration check noticed that specific monitoring stations were returning a background reading of precisely zero — a result understood to be statistically near-impossible across the number of readings taken — for equipment functioning normally in every other respect. Containment protocol for GAB-007 consists entirely of monitoring for the absence itself, which has spread, by that measure, to eleven additional stations since first detection.`
+  },
+  {
+    id: "TRUTH-14",
+    title: "GAB-008: Shadow Doppelgangers",
+    brief: "Anomalous duplicates that manifest exclusively as a subject's own cast shadow, acting independently of the subject.",
+    body: `GAB-008 describes a recurring phenomenon in which an individual's shadow detaches, in behavior rather than physical form, from its caster — continuing to move, gesture, or act after the subject has stopped, or acting in direct contradiction to the subject's own actions, while remaining visually a normal shadow in every other respect. Subjects are rarely aware of the discrepancy at the time; it is almost always identified afterward, from recorded footage. No consistent trigger for onset has been established, and no case has ever resolved through Bureau intervention rather than on its own.`
+  },
+  {
+    id: "TRUTH-15",
+    title: "GAB-009: The Doctor",
+    brief: `A recurring figure who offers medical aid at incident sites and is never present in recovered footage of the same scene.`,
+    body: `GAB-009, internally called the Doctor, has been reported at incident sites across multiple regions offering competent, and reportedly effective, medical assistance to injured civilians and Bureau personnel alike, always before official responders arrive. Descriptions of appearance are inconsistent between reports, though the manner is described identically each time: calm, unhurried, and entirely uninterested in being thanked or questioned. No sighting has ever placed the Doctor at the scene when official recovery footage is reviewed, despite multiple witnesses insisting otherwise at the time.`
+  },
+  {
+    id: "TRUTH-16",
+    title: `GAB-013: Two Headed "Human"`,
+    brief: "A human-presenting individual with two heads, encountered on four separate occasions, unaware each time of having been seen before.",
+    body: `GAB-013 has been documented on four separate occasions, always presenting as an otherwise unremarkable human individual with two functioning heads, engaged in ordinary conversation with each other rather than with observers. In each documented instance, the subject showed no indication of recognizing Bureau personnel or recalling any prior encounter, and evaded further observation within minutes with no recorded means of doing so. Whether the four sightings represent the same individual or four separate instances of the same anomaly has never been determined.`
+  },
+  {
+    id: "TRUTH-17",
+    title: "GAB-034: Virus-Psi",
+    brief: "A variant of the Virus family that manifests exclusively in dreams and has never been confirmed to affect a waking subject.",
+    body: `Virus-Psi is known only through pattern-matched reports of a recurring, structurally identical dream described independently by unconnected subjects across multiple regions, each recounting the same sequence of imagery in the same order despite no contact with one another. No subject has been confirmed to exhibit any waking symptom. The Global ledger classifies it as a Virus variant rather than a standard psychological phenomenon on the basis of one detail: the number of subjects reporting the dream has increased every year since it was first logged, at a rate consistent with person-to-person transmission the Bureau cannot otherwise explain.`
+  },
+  {
+    id: "TRUTH-18",
+    title: "GAB-045: Virus-Omega",
+    brief: "The final designated variant in the Virus family, theorized to be an eventual convergence of all prior strains.",
+    body: `Virus-Omega has never been directly observed. Its entry exists in the Global ledger on the basis of a single annotation, appended by an unidentified author, theorizing that Alpha, Delta, Theta, Gamma, and Psi are not separate anomalies but stages of one convergent pattern — and that Omega designates whatever the convergence eventually becomes. No containment protocol is listed. The annotation itself ends mid-sentence.`
+  },
+  {
+    id: "TRUTH-19",
+    title: "GAB-002: Parasite X",
+    brief: "The first in a designated family of anomalous parasitic organisms with no confirmed natural host.",
+    body: `GAB-002 was the first isolate in what the Global ledger designates the Parasite family — organisms exhibiting parasitic behavior toward human hosts but matching no known biological classification prior to infestation. Parasite X specifically targets short-term memory formation, leaving hosts otherwise unaffected and largely unaware of infestation until cross-referenced against independent witness accounts of their own recent behavior. No confirmed method of removal exists; documented cases have resolved only through the parasite's own departure, for reasons that have never been established.`
+  },
+  {
+    id: "TRUTH-20",
+    title: "GAB-004: Parasite Y",
+    brief: "The second isolate in the Parasite family, distinguished by targeting sleep cycles rather than memory.",
+    body: `Parasite Y presents similarly to GAB-002 but targets sleep architecture rather than memory formation, producing hosts who sleep on a schedule inverted from their stated preference with no subjective awareness of the shift. Isolates of Y and X have never been recovered from the same host simultaneously, though the ledger does not speculate on whether the two are mutually exclusive by nature or simply have not yet been observed to coexist.`
+  },
+  {
+    id: "TRUTH-21",
+    title: "GAB-011: Parasite Z",
+    brief: "The final confirmed isolate in the Parasite family, and the only one to leave a physical trace after departure.",
+    body: `Unlike Parasite X or Y, Parasite Z leaves a confirmable physical trace after it departs a host: a fine, hair-thin scar of unknown material embedded just beneath the skin, in a location that varies host to host with no anatomical pattern identified. No host has reported symptoms during infestation. All confirmed cases were identified after the fact, from the scar alone.`
+  },
+  {
+    id: "TRUTH-22",
+    title: "GAB-015: The Beholder",
+    brief: "An entity known only through recovered recordings, maintaining direct eye contact with every camera pointed at it.",
+    body: `GAB-015 has never been observed directly by Bureau personnel — only through recovered recording equipment, in every case showing the same behavior: an indistinct figure maintaining direct, unbroken eye contact with the recording lens itself, regardless of the device's position, angle, or concealment. No footage has ever captured the moment the figure enters or leaves frame. Personnel operating equipment that has recorded GAB-015 report no memory of anything unusual occurring during the recording.`
+  },
+  {
+    id: "TRUTH-23",
+    title: "GAB-016: The Observer",
+    brief: "A presence documented only through the sensation of being watched, with no corresponding sensor or camera data.",
+    body: `GAB-016 has never registered on any Bureau sensor, camera, or recording device under any circumstance. It is documented exclusively through consistent, independently corroborated reports from individuals describing the specific, distinct sensation of being deliberately watched, in locations later confirmed to have no possible vantage point for a human observer. The ledger classifies it as confirmed rather than anecdotal on the volume and consistency of unconnected reports alone.`
+  },
+  {
+    id: "TRUTH-24",
+    title: "GAB-017: The Watcher",
+    brief: "Distinguished from GAB-016 by producing brief, unexplained camera interference at the moment of reported sightings.",
+    body: `Where GAB-016 leaves no instrumental trace, GAB-017 produces a brief, consistent interference pattern on nearby recording equipment at the exact moment witnesses report a sighting, though never an image of anything specific. The interference lasts on average four seconds and self-corrects without technician intervention. Whether GAB-016 and GAB-017 are related or entirely separate has never been resolved by anyone with clearance to compare both files directly.`
+  },
+  {
+    id: "TRUTH-25",
+    title: "GAB-018: The Flesh Cube",
+    brief: "A cube of soft organic tissue, roughly one meter to a side, that has neither grown nor decayed since recovery.",
+    body: `Recovered intact and unexplained, GAB-018 is a roughly cubic mass of soft organic tissue, warm to the touch and structurally consistent with living muscle, that has shown no measurable growth, decay, or change of any kind in the entire recorded period since its recovery. It exhibits no vital signs by any standard measure, yet standard preservation protocols for non-living tissue have proven unnecessary — it simply does not degrade. No source tissue or donor has ever been identified.`
+  },
+  {
+    id: "TRUTH-26",
+    title: `GAB-019: "Satan"`,
+    brief: "A designation transcribed from field witness testimony describing an encountered figure; the name is the witnesses' own word, not a Bureau classification.",
+    body: `As with GAB-022, this designation was not chosen by the Bureau — it is transcribed directly from surviving witness testimony describing an encountered figure, given without further elaboration and repeated by every independent witness to the same incident despite no contact between them beforehand. The Global ledger does not endorse or dispute the name's accuracy; it simply records it as given, alongside a note that no image or physical description beyond "human-shaped" has ever been corroborated across accounts.`
+  },
+  {
+    id: "TRUTH-27",
+    title: "GAB-020: The Varia Suit",
+    brief: "A recovered piece of powered personal armor of unknown origin and manufacture, functional but unreplicable.",
+    body: `GAB-020 is a single, fully articulated suit of powered personal armor recovered intact, exhibiting environmental sealing, impact resistance, and an internal power source far beyond any manufacturing capability on record. Attempts at reverse engineering have produced no viable replication; the suit's internal components do not match any known material in Bureau catalogues. It remains functional and has been tested successfully in controlled conditions, though no authorization for field deployment has ever been granted.`
+  },
+  {
+    id: "TRUTH-28",
+    title: "GAB-021: The Holy Whip of Christ",
+    brief: "A recovered artifact matching descriptions in disputed historical religious texts; authenticity neither confirmed nor ruled out.",
+    body: `GAB-021 is a preserved braided-cord artifact recovered from a site with no recorded Hollow activity, matching descriptions found in several disputed historical religious texts referencing an instrument of the same name. Material dating places its age within a range consistent with those texts, though the Bureau's position on the artifact's authenticity, or on the events those texts describe, remains formally unstated. It is catalogued alongside the Fifty on the basis of one detail alone: instruments in its immediate proximity register a small, consistent, and otherwise unexplained Ether reading.`
+  },
+  {
+    id: "TRUTH-29",
+    title: "GAB-023: Mysterious Orb",
+    brief: "A perfectly spherical object of unidentified material that has never been successfully measured, weighed, or dated.",
+    body: `GAB-023 resists every standard method of physical measurement attempted against it: instruments record inconsistent readings for its diameter, weight, and composition on every attempt, no two of which agree with each other. Visual inspection confirms a plain, unmarked sphere roughly the size of a closed fist. It has never been observed to move on its own, and no anomalous effect has been attributed to proximity or contact, beyond the persistent inability to measure it accurately.`
+  },
+  {
+    id: "TRUTH-30",
+    title: "GAB-024: Black Shard",
+    brief: "A fragment of matte black material that absorbs all light directed at it and casts no reflection.",
+    body: `GAB-024 is a single irregular shard of a matte black material that absorbs the entirety of any light directed at it, producing no glare, reflection, or shadow of its own regardless of ambient lighting conditions. Standard spectrometry has failed to return a usable material reading. It generates no measurable heat despite the light absorption. Its origin, and any relationship to the shard catalogued separately elsewhere in this ledger, remains unconfirmed.`
+  },
+  {
+    id: "TRUTH-31",
+    title: "GAB-025: Dark Fountain",
+    brief: "A freshwater spring that has run continuously, at an unchanging rate, for the entire span of Bureau observation.",
+    body: `GAB-025 is a natural-seeming freshwater spring whose output has never varied, in volume or rate, across the entire span of Bureau observation, regardless of season, regional drought conditions, or deliberate obstruction. Water drawn from it tests as ordinary in every standard analysis. The anomaly is not in the water itself but in the fountain's total indifference to any external factor that should affect its flow.`
+  },
+  {
+    id: "TRUTH-32",
+    title: "GAB-026: Glass Shard",
+    brief: "A shard of glass-like material that reflects a location other than the one in front of it.",
+    body: `GAB-026 is a single shard of transparent, glass-like material that, when held at any angle, reflects a location that is consistently not the physical space in front of it — most often described as a dim interior room unfamiliar to any Bureau facility on record. The reflected scene shows no movement or change across repeated, timestamped observations. It has never reflected the observer's own face.`
+  },
+  {
+    id: "TRUTH-33",
+    title: "GAB-027: Pocket Dimension",
+    brief: "A confirmed small-scale pocket space accessible through a fixed physical point, contained without incident since discovery.",
+    body: `GAB-027 designates a stable, small-scale pocket space accessible only through a single fixed physical point, discovered without any associated Hollow bloom or precipitating incident. Unlike GAB-012, the space is finite, measurable, and has been mapped in full: roughly the volume of a single room, empty, unchanging, and safe for repeated entry under standard protocol. It remains the only entry in the Fifty classified as fully understood and, notably, entirely unexplained as to its origin regardless.`
+  },
+  {
+    id: "TRUTH-34",
+    title: "GAB-028: Dark Worlds",
+    brief: "A designation covering multiple pocket spaces distinct from GAB-027, none of which have been fully mapped or entered safely.",
+    body: `Where GAB-027 designates a single, safe, fully mapped pocket space, GAB-028 is a standing designation for several additional pocket spaces discovered since, none of which share GAB-027's stability. Each has resisted full mapping; personnel entering beyond a shallow initial boundary have either failed to return within an acceptable recovery window or returned with no consistent account of what lay beyond it. The number of confirmed Dark Worlds has not been made available below Level 9.`
+  },
+  {
+    id: "TRUTH-35",
+    title: "GAB-029: Negative Photons",
+    brief: "A theorized particle behavior recorded only in instrument logs, never independently reproduced or explained.",
+    body: `GAB-029 refers to a recorded instrument phenomenon in which specific detectors, under conditions the ledger does not fully specify, log light behavior consistent with a particle interaction that should not be possible under any standard physical model — informally termed negative photons by the technicians who first logged it. No physicist granted access to the raw data has offered a supported explanation. The phenomenon has not been reproduced on demand, only observed, intermittently, under conditions no one has been able to isolate.`
+  },
+  {
+    id: "TRUTH-36",
+    title: "GAB-030: The Roaring Knight",
+    brief: "An armored figure encountered exclusively at collapsed Hollow sites, always facing away from recovery teams.",
+    body: `GAB-030 has been documented exclusively at the sites of already-collapsed Hollow instances, standing motionless in full plate-style armor of unidentified manufacture, always facing away from any approaching recovery team. A low, sustained roaring sound, with no identifiable vocal or mechanical source, has been recorded at every documented sighting. No team has ever approached closely enough to attempt direct contact before the figure ceased being present between one recorded frame and the next.`
+  },
+  {
+    id: "TRUTH-37",
+    title: "GAB-031: The Shadow Titan",
+    brief: "A massive humanoid silhouette observed only at extreme distance, never confirmed by more than one instrument at a time.",
+    body: `GAB-031 has been reported as a massive, roughly humanoid silhouette visible at extreme distance against the skyline, always during low-light conditions and never confirmed by more than a single instrument or witness at any one time. No sighting has ever been corroborated by a second independent source at the same moment, despite multiple witnesses in the same general area. Estimated scale, based on angular measurement against known landmarks, would place it well beyond any confirmed anomaly elsewhere in this ledger — a figure the Bureau has been unable to either substantiate or dismiss.`
+  },
+  {
+    id: "TRUTH-38",
+    title: "GAB-032: DETERMINATION",
+    brief: "A quality observed in a small number of subjects who repeat prior actions and outcomes despite total, confirmed memory loss of them.",
+    body: `The Global ledger uses this designation, transcribed in full capitals from the original field notes without explanation, for a small number of documented subjects who, after suffering total and confirmed memory loss of a prior event, nonetheless continued to make the identical choices, take the identical actions, and reach the identical outcomes as before the loss — as though something beneath memory persisted regardless. No mechanism for this has been proposed. The notes describing it are the only entry in the Fifty written, throughout, in a visibly different hand from the rest of the ledger.`
+  },
+  {
+    id: "TRUTH-39",
+    title: "GAB-033: The Monado",
+    brief: "A recovered bladed artifact reported to grant its wielder brief, fragmentary visions of events that have not yet occurred.",
+    body: `GAB-033 is a single bladed artifact of unknown manufacture, recovered without incident, that multiple independent test subjects have reported granting brief, fragmentary visions of near-future events while held — visions consistently accurate in broad outline but never once matching their eventual outcome in specific detail. No consistent trigger for the visions has been isolated, and prolonged handling has been associated, in a minority of subjects, with a marked and lasting change in temperament that the ledger does not further describe.`
+  },
+  {
+    id: "TRUTH-40",
+    title: "GAB-036: The Conduit",
+    brief: "A recovered device that appears to allow direct, silent communication between two people who have never met.",
+    body: `GAB-036 is a small handheld device of unknown manufacture that, when held by two separate subjects regardless of physical distance between them, produces the shared, silent impression of direct communication, though neither subject can later recall specific content exchanged. Subjects consistently describe the experience as understanding rather than hearing. No electromagnetic or Ether signature has been detected passing between paired devices during use, and only one confirmed pair has ever been recovered.`
+  },
+  {
+    id: "TRUTH-41",
+    title: "GAB-037: Mysterious Emerald Crystal",
+    brief: "The first recovered of an apparent matched set of colored crystalline objects, individually inert but reactive in proximity to the others.",
+    body: `GAB-037 is a fist-sized, deep green crystalline object, chemically inert and unremarkable in isolation. Bureau instruments register no anomalous property in the crystal alone; a measurable, low-level Ether resonance appears only when it is brought within several meters of at least one other crystal catalogued elsewhere in the Fifty under a similar designation. The ledger notes the possibility of additional, uncatalogued crystals in the set without further elaboration.`
+  },
+  {
+    id: "TRUTH-42",
+    title: "GAB-038: Mysterious Red Crystal",
+    brief: "The second recovered crystal in the matched set first noted under GAB-037, sharing its proximity-reactive property.",
+    body: `Recovered independently of GAB-037, in a location with no apparent connection to the first crystal's recovery site, GAB-038 is identical in construction and behavior — inert alone, faintly reactive in the presence of another crystal from the same apparent set. Whether the two crystals were ever deliberately separated, or simply recovered from unrelated locations by coincidence, has not been determined.`
+  },
+  {
+    id: "TRUTH-43",
+    title: "GAB-039: Mysterious Purple Crystal",
+    brief: "The third confirmed crystal in the set, producing the strongest recorded resonance when paired with either of the other two.",
+    body: `GAB-039 completes the third confirmed recovery in the apparent crystal set first noted under GAB-037. Paired with either the Emerald or Red crystal, it produces a resonance reading measurably stronger than the two recovered crystals produce paired with each other. The ledger's final note on the set, appended by an unidentified author, reads only: "assume more exist."`
+  },
+  {
+    id: "TRUTH-44",
+    title: "GAB-040: Winged Evil-Slaying Blade",
+    brief: "A recovered sword with wing-shaped fittings, reported to grow measurably lighter near active Hollow instances.",
+    body: `GAB-040 is a single-edged blade of unknown alloy, fitted with wing-shaped guards that Bureau metallurgists cannot account for structurally or decoratively. In every documented test it has shown no anomalous property under standard conditions, only becoming measurably lighter and, by wielder account, "eager" in the immediate presence of active Hollow instances. No wielder has ever reported the blade behaving anomalously toward a human target under any circumstance.`
+  },
+  {
+    id: "TRUTH-45",
+    title: "GAB-041: Sacred Bow and Arrow",
+    brief: "A bow and single arrow that regenerates in its quiver after each use, regardless of what became of the previous arrow.",
+    body: `GAB-041 consists of a bow of unknown wood-analog material paired with a single arrow that has been fired, in controlled testing, on eleven separate occasions — recovered intact in its quiver each time regardless of what happened to it downrange, including one instance in which the arrow was deliberately destroyed on impact. No mechanism for the arrow's return has been observed; it is simply present again once the bow is next drawn.`
+  },
+  {
+    id: "TRUTH-46",
+    title: "GAB-042: Mysterious Phone",
+    brief: "A functioning phone of no identifiable manufacturer that periodically receives calls from a number with no valid record.",
+    body: `GAB-042 is an otherwise ordinary-appearing mobile phone that does not match any known manufacturer's hardware or software, recovered fully charged and remaining so without ever being connected to a power source. It periodically receives incoming calls from a number that, when checked against any telecommunications registry, returns no valid record. Personnel are instructed not to answer. The instruction predates any documented case of someone testing what happens if they do.`
+  },
+  {
+    id: "TRUTH-47",
+    title: "GAB-043: Mystery Man",
+    brief: "A recurring figure identified across unrelated incident reports, matched only by a consistent secondhand description.",
+    body: `GAB-043 refers to a figure described consistently, though never photographed or otherwise recorded, across multiple unrelated incident reports spanning different regions and time periods. Witnesses describe an ordinary-appearing man who arrives shortly before a Hollow-adjacent incident, offers a brief, cryptic remark to at least one witness, and departs before any response team arrives. No two reported remarks have ever repeated, and no consistent pattern connecting the incidents he appears at has been established.`
+  },
+  {
+    id: "TRUTH-48",
+    title: "GAB-044: The Man Who Speaks in Hands",
+    brief: "A figure who communicates only through hand gestures matching no known sign language, always understood regardless.",
+    body: `GAB-044 has been encountered on a small number of occasions, always described as a man who communicates exclusively through hand gestures, matching no cataloged sign language despite extensive review by qualified interpreters. Witnesses across entirely unrelated encounters consistently report understanding him perfectly regardless, describing the meaning as arriving alongside the gesture rather than through it. No witness has reported an unsettling or threatening interaction; all describe the exchange as brief, practical, and forgotten in detail within hours.`
+  },
+  {
+    id: "TRUTH-49",
+    title: `GAB-046: "Gabriel"`,
+    brief: "A designation taken from a single witness's own word for an encountered figure, in the same manner as GAB-019 and GAB-022.",
+    body: `As with GAB-019 and GAB-022, this designation was not selected by the Bureau. It is the word given by a lone surviving witness to describe a figure encountered at an otherwise unremarkable incident site, offered without further elaboration and never repeated or expanded upon in any follow-up interview. The witness's account is otherwise considered reliable and consistent with independently verified details of the incident. No further corroborating report using the same name has been logged.`
+  },
+  {
+    id: "TRUTH-50",
+    title: "GAB-047: Magical Ocarina",
+    brief: "A wind instrument whose notes, in a specific untranscribable sequence, produce a measurable drop in ambient Ether readings.",
+    body: `GAB-047 is a small wind instrument of unidentified ceramic material recovered without incident. Standard acoustic testing found nothing unusual until a technician, playing an arbitrary sequence of notes during unrelated equipment calibration, produced a measurable and repeatable drop in ambient Ether readings within the test chamber. The specific sequence has since resisted precise transcription; two technicians attempting to reproduce it from memory have produced audibly different results, both still measurably effective.`
+  },
+  {
+    id: "TRUTH-51",
+    title: `GAB-048: "Jarona"`,
+    brief: "A designation transcribed from a recovered audio fragment of uncertain origin, repeating the same word.",
+    body: `GAB-048 is transcribed from a short audio fragment recovered from damaged equipment at an incident site, in which the same word is repeated at irregular intervals by a voice that does not match any personnel present at the time, confirmed or otherwise. No meaning or origin for the word has been established in any language database the Bureau has access to. The fragment has not been played in full for personnel below Level 5 clearance since an unspecified incident during an early review.`
+  },
+  {
+    id: "TRUTH-52",
+    title: "GAB-049: John Doe",
+    brief: "An unidentified body matching no record, later reported alive and unremarkable at incidents where no body was recovered.",
+    body: `GAB-049 was first logged as an unidentified deceased recovered near the periphery of an unrelated incident, matching no missing-persons filing or biometric record accessible to the Bureau. The designation was escalated to full anomaly status only after field teams began independently reporting a man of identical description, alive and entirely unremarkable, present at three subsequent incidents in which no body of any kind was recovered. Whether the original remains and the recurring witness are the same individual has not been determined, and the original remains have not been located in Bureau custody since.`
+  }
+];
+
+// The original Global ledger accounted for fifty anomalies by number.
+// Only a handful of files ever reached this bureau intact — the rest are
+// logged here exactly as the surviving ledger fragment shows them: missing.
+const NAMED_GAB_NUMS = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50];
+for(let n=1; n<=50; n++){
+  if(NAMED_GAB_NUMS.includes(n)) continue;
+  const numStr = String(n).padStart(3,'0');
+  THE_TRUTH.push({
+    id: `GAB-${numStr}`,
+    title: `GAB-${numStr} [404 FILE NOT FOUND]`,
+    brief: "Ledger position confirmed. File contents missing, purged, or never created.",
+    body: `This entry does not resolve. GAB-${numStr} is accounted for in the original Global ledger index, but no corresponding file has ever been located in any archive available to this bureau. Whether the file was lost, deliberately removed, or never existed at all has not been determined. Reporting this discrepancy through standard channels has not, to date, produced a response.`
+  });
+}
+
+// Order numerically by GAB number; the two non-numbered context files
+// (origin of the name, overview of the ledger) stay first, in place.
+THE_TRUTH.forEach((e,i)=>{
+  const m = e.title.match(/GAB-(\d+)/) || e.id.match(/GAB-(\d+)/);
+  e._gabRank = m ? parseInt(m[1],10) : (-1000 + i);
+});
+THE_TRUTH.sort((a,b)=> a._gabRank - b._gabRank);
+
+const TRUTH_ART = {
+"TRUTH-01": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="38"/><circle cx="50" cy="50" r="24"/><path d="M50 26 L50 14 M50 86 L50 74 M26 50 L14 50 M86 50 L74 50 M32.7 32.7 L24.5 24.5 M67.3 67.3 L75.5 75.5 M32.7 67.3 L24.5 75.5 M67.3 32.7 L75.5 24.5"/><path d="M50 38 L58 50 L50 62 L42 50 Z"/></svg>`,
+
+"TRUTH-02": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M20 20 L20 80 M30 20 L30 80 M40 20 L40 80 M50 20 L50 80 M18 26 L52 74"/><path d="M65 20 L65 80 M75 20 L75 80 M85 20 L85 80"/></svg>`,
+
+"TRUTH-03": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 12 C36 22 30 34 33 48 C24 52 20 62 24 72 C29 84 44 90 50 82 C56 90 71 84 76 72 C80 62 76 52 67 48 C70 34 64 22 50 12 Z" opacity="0.9"/><circle cx="41" cy="46" r="2.5" fill="currentColor" stroke="none"/><circle cx="59" cy="46" r="2.5" fill="currentColor" stroke="none"/></svg>`,
+
+"TRUTH-04": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M38 40 Q50 16 62 40 Q68 46 62 54 L38 54 Q32 46 38 40 Z"/><path d="M34 54 L30 82 M66 54 L70 82 M34 82 L70 82"/><path d="M50 60 L44 88"/><circle cx="42" cy="46" r="1.8" fill="currentColor" stroke="none"/><circle cx="58" cy="46" r="1.8" fill="currentColor" stroke="none"/></svg>`,
+
+"TRUTH-06": `<svg viewBox="0 0 100 100" style="color:var(--teal)" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="50" cy="50" r="18"/><path d="M50 32 L50 20 M50 68 L50 80 M32 50 L20 50 M68 50 L80 50 M37 37 L28 28 M63 63 L72 72 M37 63 L28 72 M63 37 L72 28"/><circle cx="50" cy="20" r="3" fill="currentColor" stroke="none"/><circle cx="50" cy="80" r="3" fill="currentColor" stroke="none"/><circle cx="20" cy="50" r="3" fill="currentColor" stroke="none"/><circle cx="80" cy="50" r="3" fill="currentColor" stroke="none"/><text x="50" y="57" font-size="16" text-anchor="middle" fill="currentColor" stroke="none" font-family="Georgia,serif">γ</text></svg>`,
+
+"TRUTH-07": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 10 L56 60 L50 70 L44 60 Z"/><path d="M32 58 L68 58"/><path d="M50 70 L50 90"/><circle cx="50" cy="26" r="2" fill="currentColor" stroke="none"/><circle cx="50" cy="38" r="2" fill="currentColor" stroke="none"/><circle cx="50" cy="50" r="2" fill="currentColor" stroke="none"/><circle cx="38" cy="58" r="2" fill="currentColor" stroke="none"/><circle cx="62" cy="58" r="2" fill="currentColor" stroke="none"/><circle cx="44" cy="64" r="2" fill="currentColor" stroke="none"/><circle cx="56" cy="64" r="2" fill="currentColor" stroke="none"/></svg>`,
+
+"TRUTH-08": `<svg viewBox="0 0 100 100" style="color:var(--teal)" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="50" cy="50" r="18"/><path d="M50 32 L50 20 M50 68 L50 80 M32 50 L20 50 M68 50 L80 50 M37 37 L28 28 M63 63 L72 72 M37 63 L28 72 M63 37 L72 28"/><circle cx="50" cy="20" r="3" fill="currentColor" stroke="none"/><circle cx="50" cy="80" r="3" fill="currentColor" stroke="none"/><circle cx="20" cy="50" r="3" fill="currentColor" stroke="none"/><circle cx="80" cy="50" r="3" fill="currentColor" stroke="none"/><text x="50" y="57" font-size="16" text-anchor="middle" fill="currentColor" stroke="none" font-family="Georgia,serif">α</text></svg>`,
+
+"TRUTH-09": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 14 C34 14 28 30 30 44 L34 84 L66 84 L70 44 C72 30 66 14 50 14 Z"/><ellipse cx="50" cy="50" rx="12" ry="16" fill="var(--bg)" stroke="currentColor"/></svg>`,
+
+"TRUTH-10": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="30" y="16" width="40" height="66" rx="3"/><path d="M30 30 L70 30 M30 68 L70 68"/><path d="M40 68 L60 30 M60 68 L40 30" opacity="0.85"/><path d="M42 43 A10 10 0 1 1 58 43" opacity="0.85"/></svg>`,
+
+"TRUTH-11": `<svg viewBox="0 0 100 100" style="color:var(--teal)" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="50" cy="50" r="18"/><path d="M50 32 L50 20 M50 68 L50 80 M32 50 L20 50 M68 50 L80 50 M37 37 L28 28 M63 63 L72 72 M37 63 L28 72 M63 37 L72 28"/><circle cx="50" cy="20" r="3" fill="currentColor" stroke="none"/><circle cx="50" cy="80" r="3" fill="currentColor" stroke="none"/><circle cx="20" cy="50" r="3" fill="currentColor" stroke="none"/><circle cx="80" cy="50" r="3" fill="currentColor" stroke="none"/><text x="50" y="58" font-size="17" text-anchor="middle" fill="currentColor" stroke="none" font-family="Georgia,serif">Δ</text></svg>`,
+
+"TRUTH-12": `<svg viewBox="0 0 100 100" style="color:var(--teal)" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 12 L82 26 L82 66 L50 88 L18 66 L18 26 Z"/><text x="50" y="58" font-size="20" text-anchor="middle" fill="currentColor" stroke="none" font-family="Georgia,serif">ε</text></svg>`,
+
+"TRUTH-13": `<svg viewBox="0 0 100 100" style="color:var(--teal)" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="50" cy="50" r="18"/><path d="M50 32 L50 20 M50 68 L50 80 M32 50 L20 50 M68 50 L80 50 M37 37 L28 28 M63 63 L72 72 M37 63 L28 72 M63 37 L72 28"/><circle cx="50" cy="20" r="3" fill="currentColor" stroke="none"/><circle cx="50" cy="80" r="3" fill="currentColor" stroke="none"/><circle cx="20" cy="50" r="3" fill="currentColor" stroke="none"/><circle cx="80" cy="50" r="3" fill="currentColor" stroke="none"/><text x="50" y="58" font-size="17" text-anchor="middle" fill="currentColor" stroke="none" font-family="Georgia,serif">θ</text></svg>`,
+
+"TRUTH-14": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M38 16 C26 16 20 28 22 40 L24 74 L52 74 L54 40 C56 28 50 16 38 16 Z" opacity="0.55"/><path d="M62 24 C50 24 44 36 46 48 L48 82 L76 82 L78 48 C80 36 74 24 62 24 Z"/></svg>`,
+
+"TRUTH-15": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="44" r="26"/><path d="M28 50 Q50 66 72 50" /><path d="M50 18 L50 8 M20 30 L12 22 M80 30 L88 22"/><circle cx="40" cy="42" r="6" opacity="0.8"/><circle cx="60" cy="42" r="6" opacity="0.8"/></svg>`,
+
+"TRUTH-16": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 46 C50 46 38 30 30 22 M50 46 C50 46 62 30 70 22"/><circle cx="30" cy="16" r="10"/><circle cx="70" cy="16" r="10"/><path d="M40 46 C34 46 30 56 32 68 L36 86 L64 86 L68 68 C70 56 66 46 60 46 Z"/></svg>`,
+
+"TRUTH-17": `<svg viewBox="0 0 100 100" style="color:var(--teal)" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="50" cy="50" r="18"/><path d="M50 32 L50 20 M50 68 L50 80 M32 50 L20 50 M68 50 L80 50 M37 37 L28 28 M63 63 L72 72 M37 63 L28 72 M63 37 L72 28"/><circle cx="50" cy="20" r="3" fill="currentColor" stroke="none"/><circle cx="50" cy="80" r="3" fill="currentColor" stroke="none"/><circle cx="20" cy="50" r="3" fill="currentColor" stroke="none"/><circle cx="80" cy="50" r="3" fill="currentColor" stroke="none"/><text x="50" y="58" font-size="17" text-anchor="middle" fill="currentColor" stroke="none" font-family="Georgia,serif">ψ</text></svg>`,
+
+"TRUTH-18": `<svg viewBox="0 0 100 100" style="color:var(--teal)" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="50" cy="50" r="18"/><path d="M50 32 L50 20 M50 68 L50 80 M32 50 L20 50 M68 50 L80 50 M37 37 L28 28 M63 63 L72 72 M37 63 L28 72 M63 37 L72 28"/><circle cx="50" cy="20" r="3" fill="currentColor" stroke="none"/><circle cx="50" cy="80" r="3" fill="currentColor" stroke="none"/><circle cx="20" cy="50" r="3" fill="currentColor" stroke="none"/><circle cx="80" cy="50" r="3" fill="currentColor" stroke="none"/><text x="50" y="58" font-size="16" text-anchor="middle" fill="currentColor" stroke="none" font-family="Georgia,serif">Ω</text></svg>`,
+
+"TRUTH-19": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M24 30 C40 30 38 50 50 50 C62 50 60 70 76 70"/><path d="M24 70 C40 70 38 50 50 50 C62 50 60 30 76 30"/></svg>`,
+
+"TRUTH-20": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M28 26 C42 40 50 40 50 52 M72 26 C58 40 50 40 50 52"/><path d="M50 52 L50 78"/></svg>`,
+
+"TRUTH-21": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M28 28 L72 28 L30 72 L74 72"/></svg>`,
+
+"TRUTH-22": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 50 Q50 22 86 50 Q50 78 14 50 Z"/><circle cx="50" cy="50" r="14"/><circle cx="50" cy="50" r="5" fill="currentColor" stroke="none"/><path d="M30 30 L20 20 M70 30 L80 20 M30 70 L20 80 M70 70 L80 80" opacity="0.6"/><circle cx="20" cy="20" r="3" opacity="0.6"/><circle cx="80" cy="20" r="3" opacity="0.6"/><circle cx="20" cy="80" r="3" opacity="0.6"/><circle cx="80" cy="80" r="3" opacity="0.6"/></svg>`,
+
+"TRUTH-23": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="14" y="30" width="72" height="46" rx="4"/><circle cx="50" cy="53" r="16"/><circle cx="50" cy="53" r="5" fill="currentColor" stroke="none"/><rect x="40" y="20" width="20" height="10" rx="2"/></svg>`,
+
+"TRUTH-24": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 50 Q50 22 86 50 Q50 78 14 50 Z"/><circle cx="50" cy="50" r="14"/><circle cx="50" cy="50" r="5" fill="currentColor" stroke="none"/><path d="M10 24 L18 34 M90 24 L82 34 M10 76 L18 66 M90 76 L82 66" opacity="0.5" stroke-dasharray="2 4"/></svg>`,
+
+"TRUTH-25": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="24" y="24" width="52" height="52" rx="4"/><path d="M24 40 Q50 34 76 40 M24 56 Q50 62 76 56 M24 40 L24 56 M76 40 L76 56 M40 24 Q34 50 40 76 M56 24 Q62 50 56 76" opacity="0.7"/></svg>`,
+
+"TRUTH-27": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 10 A18 18 0 1 1 49.9 10 Z"/><path d="M38 30 L34 78 L46 78 L50 52 L54 78 L66 78 L62 30"/><path d="M28 40 L38 44 M72 40 L62 44" opacity="0.7"/></svg>`,
+
+"TRUTH-28": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M50 14 L50 42 M38 26 L62 26"/><path d="M50 42 C34 46 22 38 18 20 C34 20 46 28 50 42 Z"/><path d="M50 42 C50 60 60 74 78 80" opacity="0.85"/></svg>`,
+
+"TRUTH-29": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><circle cx="50" cy="42" r="20"/><path d="M40 36 Q50 30 60 36 M42 48 Q50 54 58 48" opacity="0.6"/><path d="M50 62 L50 84 M40 84 L60 84"/></svg>`,
+
+"TRUTH-30": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill-opacity="0.15"><path d="M50 16 L78 30 L74 58 L50 88 L26 58 L22 30 Z" fill="currentColor"/></svg>`,
+
+"TRUTH-31": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 16 L78 30 L74 58 L50 88 L26 58 L22 30 Z"/><path d="M50 16 L50 88 M22 30 L78 58 M78 30 L22 58" opacity="0.5"/></svg>`,
+
+"TRUTH-32": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3" stroke-linejoin="round"><rect x="20" y="20" width="60" height="60"/><path d="M32 34 L44 34 L44 46 L32 46 Z M56 34 L68 34 L68 46 L56 46 Z M32 54 L44 54 L44 66 L32 66 Z M56 54 L68 54 L68 66 L56 66 Z" opacity="0.5"/></svg>`,
+
+"TRUTH-33": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M50 84 C50 84 44 40 44 24 C44 16 56 16 56 24 C56 40 50 84 50 84 Z"/><path d="M32 26 L68 26"/><path d="M50 24 L50 12"/></svg>`,
+
+"TRUTH-34": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round"><rect x="30" y="14" width="40" height="20" rx="3"/><path d="M30 34 L36 86 M70 34 L64 86 M40 60 L60 60"/><path d="M40 34 Q50 44 60 34" opacity="0.7"/></svg>`,
+
+"TRUTH-35": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 14 L60 42 L88 42 L64 58 L74 86 L50 68 L26 86 L36 58 L12 42 L40 42 Z"/></svg>`,
+
+"TRUTH-36": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="9" fill="currentColor" stroke="none"/><path d="M50 41 L50 16 M50 59 L50 84 M41 50 L16 50 M59 50 L84 50 M43.6 43.6 L26 26 M56.4 56.4 L74 74 M43.6 56.4 L26 74 M56.4 43.6 L74 26"/><circle cx="16" cy="50" r="4"/><circle cx="84" cy="50" r="4"/><circle cx="50" cy="16" r="4"/><circle cx="50" cy="84" r="4"/></svg>`,
+
+"TRUTH-37": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 12 C34 12 28 26 30 38 C20 42 16 54 20 66 L30 90 L70 90 L80 66 C84 54 80 42 70 38 C72 26 66 12 50 12 Z" fill="currentColor" fill-opacity="0.35"/><path d="M40 84 L36 96 M60 84 L64 96" opacity="0.5"/></svg>`,
+
+"TRUTH-38": `<svg viewBox="0 0 100 100" style="color:var(--red)" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M50 82 C20 58 14 38 26 26 C36 16 48 22 50 34 C52 22 64 16 74 26 C86 38 80 58 50 82 Z" fill="currentColor" fill-opacity="0.25"/></svg>`,
+
+"TRUTH-39": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M50 90 C50 90 40 44 42 24 C43 14 57 14 58 24 C60 44 50 90 50 90 Z"/><path d="M30 22 L70 22"/><circle cx="50" cy="20" r="4" fill="currentColor" stroke="none"/></svg>`,
+
+"TRUTH-40": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="50" r="9" fill="currentColor" stroke="none"/><path d="M50 41 L50 16 M50 59 L50 84 M41 50 L16 50 M59 50 L84 50 M43.6 43.6 L26 26 M56.4 56.4 L74 74 M43.6 56.4 L26 74 M56.4 43.6 L74 26"/><circle cx="16" cy="50" r="4"/><circle cx="84" cy="50" r="4"/><circle cx="50" cy="16" r="4"/><circle cx="50" cy="84" r="4"/></svg>`,
+
+"TRUTH-41": `<svg viewBox="0 0 100 100" style="color:#3ddc84" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"><path d="M50 14 L74 34 L64 84 L36 84 L26 34 Z"/><path d="M50 14 L50 84 M26 34 L74 34" opacity="0.5"/></svg>`,
+
+"TRUTH-42": `<svg viewBox="0 0 100 100" style="color:var(--red)" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"><path d="M50 14 L74 34 L64 84 L36 84 L26 34 Z"/><path d="M50 14 L50 84 M26 34 L74 34" opacity="0.5"/></svg>`,
+
+"TRUTH-43": `<svg viewBox="0 0 100 100" style="color:#b06bff" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linejoin="round"><path d="M50 14 L74 34 L64 84 L36 84 L26 34 Z"/><path d="M50 14 L50 84 M26 34 L74 34" opacity="0.5"/></svg>`,
+
+"TRUTH-44": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 12 L58 60 L50 74 L42 60 Z"/><path d="M42 60 L46 78 L54 78 L58 60"/><path d="M40 30 C24 26 14 34 10 46 C24 48 36 42 40 30 Z" opacity="0.85"/><path d="M60 30 C76 26 86 34 90 46 C76 48 64 42 60 30 Z" opacity="0.85"/></svg>`,
+
+"TRUTH-45": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M28 18 Q54 50 28 82"/><path d="M28 18 L28 82" stroke-dasharray="2 4" opacity="0.6"/><path d="M28 50 L80 50 M70 42 L80 50 L70 58"/></svg>`,
+
+"TRUTH-46": `<svg viewBox="0 0 100 100" style="color:var(--teal)" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><rect x="34" y="14" width="32" height="72" rx="6"/><path d="M34 68 L66 68"/><circle cx="50" cy="77" r="2.2" fill="currentColor" stroke="none"/><path d="M44 32 Q50 26 56 32 Q50 40 44 32 Z" opacity="0.7"/></svg>`,
+
+"TRUTH-47": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 18 C36 18 30 30 30 42 L28 60 C40 74 60 74 72 60 L70 42 C70 30 64 18 50 18 Z"/><path d="M20 56 Q50 42 80 56" opacity="0.8"/></svg>`,
+
+"TRUTH-48": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><path d="M50 88 C50 88 34 66 34 48 C34 30 66 30 66 48 C66 66 50 88 50 88 Z" opacity="0.85"/><path d="M42 46 L58 46 M40 54 L60 54 M44 62 L56 62" opacity="0.6"/></svg>`,
+
+"TRUTH-49": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="32" r="12" opacity="0.7"/><path d="M50 44 L50 84"/><path d="M50 50 C30 46 16 54 10 70 C30 72 44 62 50 50 Z" opacity="0.85"/><path d="M50 50 C70 46 84 54 90 70 C70 72 56 62 50 50 Z" opacity="0.85"/></svg>`,
+
+"TRUTH-50": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="50" cy="54" rx="26" ry="20"/><path d="M46 20 Q50 34 46 44" opacity="0.8"/><circle cx="38" cy="52" r="2.5" fill="currentColor" stroke="none"/><circle cx="48" cy="58" r="2.5" fill="currentColor" stroke="none"/><circle cx="58" cy="52" r="2.5" fill="currentColor" stroke="none"/><circle cx="64" cy="60" r="2.5" fill="currentColor" stroke="none"/></svg>`,
+
+"TRUTH-51": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round"><path d="M14 50 L14 50 M24 40 L24 60 M34 28 L34 72 M44 46 L44 54 M54 20 L54 80 M64 44 L64 56 M74 32 L74 68 M84 46 L84 54"/></svg>`,
+
+"TRUTH-52": `<svg viewBox="0 0 100 100" fill="none" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="50" cy="38" r="20" stroke-dasharray="4 5"/><path d="M28 86 C28 64 36 56 50 56 C64 56 72 64 72 86" stroke-dasharray="4 5"/><text x="50" y="45" font-size="20" text-anchor="middle" fill="currentColor" stroke="none" font-family="Georgia,serif">?</text></svg>`
+};
+
+function renderL9TruthList(){
+  const wrap = document.getElementById('l9TruthList');
+  wrap.innerHTML = '';
+  THE_TRUTH.forEach(e=>{
+    const card = document.createElement('div');
+    card.className = 'l9truth';
+    card.onclick = ()=>openL9CaseDetail(e.id);
+    const art = TRUTH_ART[e.id];
+    card.innerHTML = `
+      <div class="l9truth-row">
+        ${art ? `<div class="l9truth-icon">${art}</div>` : ''}
+        <div class="l9truth-text">
+          <div class="l9truth-id">${e.id}</div>
+          <div class="l9truth-title">${e.title}</div>
+          <div class="l9truth-brief">${e.brief}</div>
+        </div>
+      </div>`;
+    wrap.appendChild(card);
+  });
+}
+
+function findL9Entry(id){
+  return OMEGA_FILES.find(x=>x.id===id) || DEATH_FILES.find(x=>x.id===id) || THE_TRUTH.find(x=>x.id===id);
+}
+function accentFor(id){
+  if(DEATH_FILES.some(x=>x.id===id)) return 'var(--red)';
+  if(THE_TRUTH.some(x=>x.id===id)) return 'var(--amber)';
+  return 'var(--magenta)';
+}
+function openL9CaseDetail(id){
+  const e = findL9Entry(id);
+  if(!e) return;
+  const accent = accentFor(id);
+  const art = TRUTH_ART[id];
+  document.getElementById('l9dBody').innerHTML = `
+    ${art ? `<div class="l9d-icon">${art}</div>` : ''}
+    <div class="section-label" style="color:${accent};">${e.id}</div>
+    <div class="detail-title">${e.title}</div>
+    <div class="rule"></div>
+    <div>${e.body}</div>`;
+  document.getElementById('l9Main').style.display='none';
+  document.getElementById('l9CaseDetail').style.display='block';
+  window.scrollTo(0,0);
+}
+function closeL9CaseDetail(){
+  document.getElementById('l9CaseDetail').style.display='none';
+  document.getElementById('l9Main').style.display='block';
 }
 
 if('serviceWorker' in navigator){
