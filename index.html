@@ -41,8 +41,7 @@
   #login{min-height:100vh;display:flex;flex-direction:column;align-items:center;
     padding:32px 20px 60px;position:relative;}
 
-  .mark{width:104px;height:104px;margin:18px 0 6px;}
-  .mark path{fill:none;stroke:var(--red);stroke-width:5;}
+  .mark{width:112px;height:112px;margin:18px 0 6px;}
 
   h1.brand{font-size:26px;letter-spacing:6px;color:var(--red);margin:4px 0 2px;
     text-align:center;text-shadow:0 0 14px rgba(225,57,71,.45);}
@@ -115,6 +114,35 @@
   .addendum{border-left:2px solid var(--magenta);padding-left:10px;color:var(--text-dim);font-size:13px;}
 
   .empty{padding:40px 20px;text-align:center;color:var(--text-dim);font-size:13px;}
+
+  /* ---------- LEVEL 5 CLASSIFIED ---------- */
+  #secret{display:none;padding:0 0 60px;background:var(--bg);min-height:100vh;}
+  .secret-head{background:#160709;border-bottom:2px solid var(--magenta);padding:16px;}
+  .secret-tag{font-size:11px;letter-spacing:2px;color:var(--magenta);}
+  .secret-title{font-size:19px;margin:6px 0 4px;color:var(--text);}
+  .secret-note{font-size:11.5px;color:var(--text-dim);}
+  #secretList{padding:14px 16px 20px;display:flex;flex-direction:column;gap:9px;}
+  .scard{border:1px solid var(--magenta);background:var(--bg-raised);padding:11px 12px;cursor:pointer;}
+  .scard:active{background:rgba(255,63,158,.08);}
+  .scard-id{font-size:11px;letter-spacing:1px;color:var(--magenta);}
+  .scard-title{margin-top:6px;font-size:14px;color:var(--text);}
+  .scard-brief{margin-top:5px;font-size:11.5px;color:var(--text-dim);line-height:1.4;}
+  #secretDetail .back{border-color:var(--magenta);color:var(--magenta);margin:16px 16px 0;}
+  #secretDetail .detail-body{padding:16px;}
+
+  /* ---------- LEVEL 9 ROSTER ---------- */
+  #l9{display:none;padding:0 0 60px;background:var(--bg);min-height:100vh;}
+  .l9-head{background:#081312;border-bottom:2px solid var(--teal);padding:16px;}
+  .l9-tag{font-size:11px;letter-spacing:2px;color:var(--teal);}
+  .l9-title{font-size:19px;margin:6px 0 4px;color:var(--text);}
+  .l9-note{font-size:11.5px;color:var(--text-dim);}
+  #l9List{padding:14px 16px 20px;display:flex;flex-direction:column;gap:8px;}
+  .l9row{border:1px solid var(--teal);background:var(--bg-raised);padding:10px 12px;}
+  .l9row-top{display:flex;justify-content:space-between;align-items:center;gap:8px;}
+  .l9row-user{color:var(--teal);font-size:13.5px;letter-spacing:.5px;}
+  .l9row-clearance{font-size:10.5px;letter-spacing:1px;padding:2px 7px;border:1px solid currentColor;color:var(--amber);}
+  .l9row-pass{margin-top:6px;font-size:11.5px;color:var(--text-dim);}
+  .l9row-role{margin-top:2px;font-size:12.5px;color:var(--text);}
 </style>
 </head>
 <body>
@@ -122,10 +150,41 @@
 
 <!-- ============ LOGIN ============ -->
 <div id="login">
-  <svg class="mark" viewBox="0 0 100 100">
-    <path d="M50 6 L90 50 L50 94 L10 50 Z"/>
-    <path d="M50 26 L74 50 L50 74 L26 50 Z"/>
-    <circle cx="50" cy="50" r="6" fill="var(--red)" stroke="none"/>
+  <svg class="mark" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <linearGradient id="ringGrad" x1="15%" y1="5%" x2="85%" y2="95%">
+        <stop offset="0%" stop-color="#ffcf7d"/>
+        <stop offset="32%" stop-color="#f2701f"/>
+        <stop offset="60%" stop-color="#c8322f"/>
+        <stop offset="82%" stop-color="#7a1620"/>
+        <stop offset="100%" stop-color="#e0522a"/>
+      </linearGradient>
+      <radialGradient id="hiShine" cx="30%" cy="22%" r="70%">
+        <stop offset="0%" stop-color="#ffffff" stop-opacity="0.10"/>
+        <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+      </radialGradient>
+    </defs>
+
+    <circle cx="60" cy="60" r="57" fill="#000"/>
+    <circle cx="60" cy="60" r="53.5" fill="none" stroke="url(#ringGrad)" stroke-width="9"/>
+    <circle cx="60" cy="60" r="46" fill="#0f0f11"/>
+
+    <g>
+      <polygon points="60,14 95.8,60 60,60" fill="#232327"/>
+      <polygon points="95.8,60 60,60 95.8,106" fill="#1b1b1f"/>
+      <polygon points="95.8,106 60,60 60,106" fill="#28282c"/>
+      <polygon points="60,106 60,60 24.2,106" fill="#1c1c20"/>
+      <polygon points="24.2,106 60,60 24.2,60" fill="#252529"/>
+      <polygon points="24.2,60 60,60 60,14" fill="#1a1a1e"/>
+    </g>
+    <circle cx="60" cy="60" r="46" fill="url(#hiShine)"/>
+    <circle cx="60" cy="60" r="46" fill="none" stroke="#000" stroke-width="1" opacity="0.5"/>
+
+    <text x="61.2" y="68.8" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="35" fill="#000">EAB</text>
+    <text x="60" y="67" text-anchor="middle" font-family="Arial, sans-serif" font-weight="900" font-size="35" fill="#f7f1eb">EAB</text>
+
+    <text x="60" y="83" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="6.2" letter-spacing="1.3" fill="#cdc5be">ERIDIAN ANOMALY</text>
+    <text x="60" y="90.5" text-anchor="middle" font-family="Arial, sans-serif" font-weight="700" font-size="6.2" letter-spacing="2.6" fill="#cdc5be">BUREAU</text>
   </svg>
   <h1 class="brand glitch">E.A.B.</h1>
   <div class="brand-sub">ERIDIAN ANOMALY BUREAU — HOLLOW CONTAINMENT DIVISION</div>
@@ -160,6 +219,8 @@
       <div class="title">EAB CASEFILE ARCHIVE</div>
       <div class="who">OPERATOR: <span id="whoName"></span></div>
     </div>
+    <button id="l5Btn" onclick="openSecret()" style="display:none;border-color:#2a0010;background:#160709;color:var(--magenta);margin-right:6px;">L5 BRIEFING</button>
+    <button id="l9Btn" onclick="openL9()" style="display:none;border-color:#062820;background:#081312;color:var(--teal);margin-right:6px;">L9 ROSTER</button>
     <button onclick="logout()">LOG OUT</button>
   </header>
 
@@ -181,38 +242,98 @@
   <div class="detail-body" id="dBody"></div>
 </div>
 
+<!-- ============ LEVEL 5 CLASSIFIED ============ -->
+<div id="secret">
+  <div class="secret-head">
+    <button class="back" onclick="closeSecret()">‹ BACK TO ARCHIVE</button>
+    <div class="secret-tag">LEVEL 5 CLEARANCE REQUIRED</div>
+    <div class="secret-title">NEW ERIDU — CLASSIFIED BRIEFINGS</div>
+    <div class="secret-note">Distribution restricted. Do not discuss outside cleared personnel.</div>
+  </div>
+  <div id="secretList"></div>
+  <div id="secretDetail" style="display:none;">
+    <button class="back" id="secretDetailBack" onclick="closeSecretDetail()">‹ BACK TO BRIEFINGS</button>
+    <div class="detail-body" id="sBody"></div>
+  </div>
+</div>
+
+<!-- ============ LEVEL 9 PERSONNEL ROSTER ============ -->
+<div id="l9">
+  <div class="l9-head">
+    <button class="back" onclick="closeL9()">‹ BACK TO ARCHIVE</button>
+    <div class="l9-tag">LEVEL 9 CLEARANCE REQUIRED</div>
+    <div class="l9-title">FULL OPERATOR ROSTER</div>
+    <div class="l9-note">All active credentials, clearance levels, and assignments. This list does not change between sessions.</div>
+  </div>
+  <div id="l9List"></div>
+</div>
+
 <script>
 /* ============================================================
    CREDENTIALS
    ============================================================ */
-function randToken(len, alpha){
+function randToken(len, alpha, rng){
+  rng = rng || Math.random;
   let s='';
-  for(let i=0;i<len;i++) s += alpha[Math.floor(Math.random()*alpha.length)];
+  for(let i=0;i<len;i++) s += alpha[Math.floor(rng()*alpha.length)];
   return s;
 }
 const NAME_SYL = ["ka","ri","mo","zen","tsu","dre","lin","fex","oru","van","shi","kel","noa","bry","tan","goh"];
-function randOperatorName(){
-  const parts = 2 + Math.floor(Math.random()*2);
+function randOperatorName(rng){
+  rng = rng || Math.random;
+  const parts = 2 + Math.floor(rng()*2);
   let n='';
-  for(let i=0;i<parts;i++) n += NAME_SYL[Math.floor(Math.random()*NAME_SYL.length)];
+  for(let i=0;i<parts;i++) n += NAME_SYL[Math.floor(rng()*NAME_SYL.length)];
   return n.charAt(0).toUpperCase()+n.slice(1);
 }
-const VALID_CREDS = [{u:"DRIchirin", p:"znce97"}];
+
+// Seeded PRNG (defined here so account generation stays IDENTICAL on every reload,
+// instead of reshuffling with Math.random). Same function used later for casefiles.
+function mulberry32(seed){
+  return function(){
+    seed |= 0; seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+function pickWith(rng, arr){ return arr[Math.floor(rng() * arr.length)]; }
+
+const ROLE_BY_TIER = {
+  1: ["Field Intern","Records Clerk","Junior Patrol Operator","Signal Desk Runner"],
+  2: ["Field Handler","Containment Technician","Ether Gauge Reader","Casefile Archivist"],
+  3: ["Senior Field Handler","Ether Analyst","Incident Responder","Containment Supervisor"],
+  4: ["Division Liaison","Incident Coordinator","Regional Handler Lead","Bureau Auditor"],
+  5: ["Classified Briefing Officer","Deputy Director","Division Chief","Oversight Analyst"]
+};
+
+const ACCOUNT_SEED = 918273645; // fixed seed — accounts stay identical across reloads
+const acctRng = mulberry32(ACCOUNT_SEED);
+
+const VALID_CREDS = [{u:"DRIchirin", p:"znce97", clearance:9, role:"Director, Unlisted Oversight"}];
 for(let i=0;i<20;i++){
+  const clearance = 1 + Math.floor(acctRng()*5); // fixed 1–5 per account, seeded
   VALID_CREDS.push({
-    u: randOperatorName() + Math.floor(Math.random()*90+10),
-    p: randToken(6, "abcdefghjkmnpqrstuvwxyz23456789")
+    u: randOperatorName(acctRng) + (10 + Math.floor(acctRng()*90)),
+    p: randToken(6, "abcdefghjkmnpqrstuvwxyz23456789", acctRng),
+    clearance,
+    role: pickWith(acctRng, ROLE_BY_TIER[clearance])
   });
 }
+
+let currentClearance = 1;
 
 function tryLogin(){
   const u = document.getElementById('u').value.trim();
   const p = document.getElementById('p').value.trim();
   const hit = VALID_CREDS.find(c => c.u === u && c.p === p);
   if(hit){
+    currentClearance = hit.clearance || 1;
     document.getElementById('login').style.display='none';
     document.getElementById('app').style.display='block';
     document.getElementById('whoName').textContent = u;
+    document.getElementById('l5Btn').style.display = (currentClearance>=5) ? 'inline-block' : 'none';
+    document.getElementById('l9Btn').style.display = (currentClearance>=9) ? 'inline-block' : 'none';
     renderChips();
     renderList();
   } else {
@@ -222,9 +343,12 @@ function tryLogin(){
 function logout(){
   document.getElementById('app').style.display='none';
   document.getElementById('detail').style.display='none';
+  document.getElementById('secret').style.display='none';
+  document.getElementById('l9').style.display='none';
   document.getElementById('login').style.display='flex';
   document.getElementById('u').value=''; document.getElementById('p').value='';
   document.getElementById('err').style.display='none';
+  currentClearance = 1;
 }
 function toggleA11y(){
   document.body.classList.toggle('a11y');
@@ -248,22 +372,42 @@ const OBJECTS = ["vending machine","payphone","arcade cabinet","subway turnstile
 "manhole cover","billboard panel","capsule-toy machine","ceiling fan","street lamp","chalk hopscotch grid",
 "stone cat statue","koi pond","rooftop antenna","subway map board","escalator step","toll booth window",
 "umbrella stand","conveyor belt","fortune-telling cabinet","ticket kiosk","crosswalk button","vending drone",
-"pachinko machine","barbershop chair","noodle-shop bell","rain gutter","traffic cone","parking garage gate"];
+"pachinko machine","barbershop chair","noodle-shop bell","rain gutter","traffic cone","parking garage gate",
+"rooftop pigeon coop","busker's amplifier","claw machine","umbrella rental stand","street corner mirror",
+"storm drain grate","noodle-shop menu board","bicycle rack","payphone booth door","rooftop clothesline",
+"vending machine light panel","crossing guard's flag","conductor's whistle","stairwell mural",
+"elevator button panel","rooftop water cooler","mailbox slot flap","arcade prize counter",
+"laundromat coin slot","bus route map","rooftop satellite dish","fire hydrant","alley cat feeder",
+"rooftop garden trellis","station clock","toll booth ticket dispenser","vending machine coin return",
+"street food skewer rack","subway emergency intercom","rooftop wind chime","shoe-shine stand",
+"bicycle bell","corner shrine incense burner","rooftop pigeon statue","train platform speaker",
+"night-market lantern string","vending machine receipt slot"];
 
 const ADJ = ["recursive","flickering","static-laced","off-frequency","gravity-averse","backward-clocked",
 "memory-hungry","overexposed","subsonic","ether-slick","half-erased","phase-shifted","echoing","magnetized",
 "glass-veined","humming","frost-bitten","seven-angled","tideless","unblinking","doubled","unlisted",
-"cold-burning","salt-scarred","quiet-voiced"];
+"cold-burning","salt-scarred","quiet-voiced","unlit","overwound","half-remembered","tide-locked",
+"glass-throated","rain-fed","dust-quiet","copper-veined","moth-eaten","tally-marked","unspooled",
+"chalk-pale","brass-tongued","curfew-bound","paper-thin","ink-slick","fog-bitten","ash-quiet",
+"threadbare","noon-shy","dusk-heavy","undated","triple-shadowed","backlit","unanswered","hairline-cracked",
+"soot-fingered","low-voltage","unwitnessed","lantern-sick","rust-throated"];
 
 const DISTRICTS = ["the Foundry Docks","Neon Row","the Static Market","the Undertrack","Coral Terrace",
 "the Rustwork","Glassline","the Choir Blocks","Lower Vellum","the Spoke Interchange","Ashwell Quarter",
-"the Tideworks","Signal Hill","the Bellcourt","Cinderpath","the Drowned Arcade"];
+"the Tideworks","Signal Hill","the Bellcourt","Cinderpath","the Drowned Arcade","the Marrow District",
+"Lantern Row","the Cutbank","Saltpier","the Long Stairs","Cinder Junction","the Hollow Gate",
+"Verdigris Court","the Nightmarket Spine","Ashen Terrace"];
 
 const TRIGGERS = ["a blackout along the transit spine","a Hollow bloom three blocks over",
 "an unlicensed Ether transplant nearby","a rerouted subway line","a noise complaint filed at 3 a.m.",
 "a spike in ambient static across the block","a citywide signal outage","a delivery drone crash",
 "a sudden temperature drop with no weather cause","a resident's missing-persons report","an unexplained power surge",
-"a Bureau sweep that found no Hollow but left this instead"];
+"a Bureau sweep that found no Hollow but left this instead","a citywide curfew drill","a burst water main",
+"a Hollow tremor felt three floors up","an Ether vendor's license revocation","a transit strike",
+"a rooftop fire put out within minutes","a missing-cat flyer campaign that covered six blocks",
+"a train that wasn't on any schedule","a Bureau audit that found nothing else wrong",
+"a dare that went further than intended","a street vendor's sudden disappearance",
+"a demolition order that was quietly never carried out"];
 
 const EFFECT_VERBS = ["loop the same forty seconds of ambient noise","reflect visitors as they'll look six minutes from now",
 "dispense items it was never stocked with","rearrange the memory of whoever last used it",
@@ -271,13 +415,24 @@ const EFFECT_VERBS = ["loop the same forty seconds of ambient noise","reflect vi
 "grow a thin lattice of frost regardless of season","answer questions it was never asked",
 "cast the shadow of something standing just behind the viewer","show its own reflection a few years older",
 "run in reverse for exactly one cycle per day","forget it was ever touched, along with the person who touched it",
-"repeat one stranger's voice back at everyone who passes","keep perfect time for a district that no longer exists"];
+"repeat one stranger's voice back at everyone who passes","keep perfect time for a district that no longer exists",
+"count down from a number nobody set","play a jingle no one in the Bureau recognizes",
+"cast light with no visible source","reset itself mid-use, every use","speak in the voice of the last person who complained about it",
+"draw stray cats to the same spot at the same hour nightly","record conversations it has no microphone for",
+"dispense change in a currency that stopped circulating decades ago","glow faintly only when unobserved",
+"repeat the last thing said near it, days after the fact","grow warm to the touch only after sunset",
+"refuse to close no matter how it's latched"];
 
 const SYMPTOMS = ["a metallic taste that fades within the hour","mild vertigo and a compulsion to return",
 "short gaps in memory, three to five minutes wide","an urge to speak in unison with nearby strangers",
 "a lingering smell of ozone on their clothes","recurring dreams set at the object's exact location",
 "sudden, brief fluency in a language they don't speak","the sense of being one step behind their own body",
-"a ringing that only stops indoors","the conviction they've done this exact thing before"];
+"a ringing that only stops indoors","the conviction they've done this exact thing before",
+"a craving for a food they don't remember ordering","the certainty they left something behind, though nothing is missing",
+"a faint ringing that syncs with their own heartbeat","difficulty recalling their commute home afterward",
+"a sudden dislike of mirrors that fades by morning","goosebumps that don't fully settle for days",
+"the sense that their reflection is a half-second slow","an ache in a tooth they don't have",
+"a compulsion to count something nearby, anything","dreams narrated in a stranger's voice"];
 
 const CONTAIN_TMPL = [
 n => `Contained on-site behind a ${n}-meter Ether-dampening barrier. Bureau personnel rotate observation in pairs; direct contact requires Tier-2 clearance.`,
@@ -285,35 +440,60 @@ n => `Relocated to Bureau Storage Wing ${String.fromCharCode(64+n%6+1)}; motion 
 n => `Left in situ to avoid destabilizing surrounding Hollow density. A discreet perimeter of Bureau-owned storefronts monitors foot traffic within ${n*10} meters.`,
 n => `Housed in a humidity-controlled cell at Bureau HQ; personnel rotate every ${n} hours to limit cumulative exposure.`,
 n => `A dummy replacement has been installed for public use; the genuine item is stored under standard containment pending review.`,
-n => `Fenced off under a false "maintenance" notice. Bureau liaisons intercept municipal work orders that would otherwise expose it.`
+n => `Fenced off under a false "maintenance" notice. Bureau liaisons intercept municipal work orders that would otherwise expose it.`,
+n => `Left fully accessible to the public; a plainclothes Handler restocks or resets it every ${n} days to keep behavior within logged parameters.`,
+n => `Wrapped in a ${n}-layer signal-dampening tarp between observations. Any tear in the tarp requires immediate Tier-1 notification.`,
+n => `Monitored remotely via a repurposed traffic camera; on-site checks occur only when readings drift more than ${n*5}% from baseline.`
 ];
 
 function cap(s){return s.charAt(0).toUpperCase()+s.slice(1);}
-function pick(arr, seed){return arr[seed % arr.length];}
+// mulberry32() and pickWith() are already defined above in the CREDENTIALS block
+// and reused here so each casefile's word choices stay independent of its neighbors.
+
+const TITLE_TEMPLATES = [
+  (adj,obj,distr,n) => `The ${cap(adj)} ${cap(obj)}`,
+  (adj,obj,distr,n) => `${cap(obj)}, ${cap(adj)}`,
+  (adj,obj,distr,n) => `${cap(obj)} No. ${n}`,
+  (adj,obj,distr,n) => `The ${cap(adj)} ${cap(obj)} of ${distr}`,
+  (adj,obj,distr,n) => `Unregistered ${cap(obj)} (${adj})`
+];
+
+const DESC_TEMPLATES = [
+  (obj,distr,trig,verb,symp,pct) => `First logged near ${distr} following ${trig}, the ${obj} began to ${verb}. `+
+    `Ambient Ether saturation near the object peaked at ${pct}% before settling to background levels. `+
+    `Subjects who make direct contact typically report ${symp}.`,
+  (obj,distr,trig,verb,symp,pct) => `Bureau patrols flagged the ${obj} in ${distr} after ${trig}. Since then it has been observed to ${verb}, `+
+    `with Ether readings holding near ${pct}% of the Bureau's alert threshold. Those who linger nearby describe ${symp}.`,
+  (obj,distr,trig,verb,symp,pct) => `No formal report explains how the ${obj} in ${distr} came to ${verb} — the earliest note in the file simply cites ${trig}. `+
+    `Field instruments place Ether density at ${pct}% of baseline. Exposure is mild but consistent: ${symp}.`,
+  (obj,distr,trig,verb,symp,pct) => `The ${obj} has stood in ${distr} for years; only after ${trig} did it start to ${verb}. `+
+    `Bureau sensors log Ether concentration at a steady ${pct}%. Anyone who interacts with it walks away with ${symp}.`,
+  (obj,distr,trig,verb,symp,pct) => `${cap(distr)} residents began complaining about the ${obj} shortly after ${trig}; Bureau follow-up confirmed it had started to ${verb}. `+
+    `Readings on-site run about ${pct}% above the district average. The most common aftereffect is ${symp}.`
+];
 
 function buildEntry(index){
-  const adjI = (index*7 + 3) % ADJ.length;
-  const objI = (index*11 + 5) % OBJECTS.length;
-  const adj = ADJ[(adjI + Math.floor(index/ADJ.length)) % ADJ.length];
-  const obj = OBJECTS[(objI + Math.floor(index/OBJECTS.length)*3) % OBJECTS.length];
-  const distr = pick(DISTRICTS, index*3+1);
-  const trig = pick(TRIGGERS, index*5+2);
-  const verb = pick(EFFECT_VERBS, index*9+4);
-  const symp = pick(SYMPTOMS, index*13+6);
-  const cls = CLASSES[index % CLASSES.length];
+  const rng = mulberry32(index * 104729 + 17); // large prime seed spread
+  const adj = pickWith(rng, ADJ);
+  const obj = pickWith(rng, OBJECTS);
+  const distr = pickWith(rng, DISTRICTS);
+  const trig = pickWith(rng, TRIGGERS);
+  const verb = pickWith(rng, EFFECT_VERBS);
+  const symp = pickWith(rng, SYMPTOMS);
+  const cls = CLASSES[Math.floor(rng() * CLASSES.length)];
   const idNum = String(index+1).padStart(3,'0');
-  const percent = 20 + (index*17)%75;
-  const contain = CONTAIN_TMPL[index % CONTAIN_TMPL.length](2 + (index%5));
-  const hasAddendum = (index % 3 === 0);
+  const percent = 15 + Math.floor(rng() * 80);
+  const contain = pickWith(rng, CONTAIN_TMPL)(2 + Math.floor(rng()*6));
+  const hasAddendum = rng() < 0.4;
+  const titleFn = pickWith(rng, TITLE_TEMPLATES);
+  const descFn = pickWith(rng, DESC_TEMPLATES);
 
-  const title = `The ${cap(adj)} ${cap(obj)}`;
+  const title = titleFn(adj, obj, distr, index+1);
   const brief = `A ${adj} ${obj} in ${distr} that has begun to ${verb}.`;
-  const description = `First logged near ${distr} following ${trig}, the ${obj} began to ${verb}. `+
-    `Ambient Ether saturation near the object peaked at ${percent}% before stabilizing to background levels. `+
-    `Subjects who make direct contact typically report ${symp}.`;
+  const description = descFn(obj, distr, trig, verb, symp, percent);
   const addendum = hasAddendum ?
     `Addendum ${idNum}-A: A second incident was logged after a bystander attempted to remove the ${obj} from ${distr}. `+
-    `The item returned to its original position within ${1+(index%6)} hours; the bystander's account of the event does not match Bureau camera footage.` : null;
+    `The item returned to its original position within ${1+Math.floor(rng()*6)} hours; the bystander's account of the event does not match Bureau camera footage.` : null;
 
   return {
     id: `EAB-${idNum}`,
@@ -402,6 +582,127 @@ function openDetail(id){
 }
 function closeDetail(){
   document.getElementById('detail').style.display='none';
+  document.getElementById('app').style.display='block';
+}
+
+/* ============================================================
+   LEVEL 5 CLASSIFIED — TOP SECRET: CITY OF NEW ERIDU
+   ============================================================ */
+const TOP_SECRET = [
+  {
+    id: "NE-TS-01",
+    title: "Before the Bureau",
+    brief: "The founding charter predates any recorded Hollow activity by six years.",
+    body: `Public record holds that the Bureau was formed in response to the first confirmed Hollow bloom beneath the Foundry Docks. Internal founding documents tell a different story: the charter was drafted and signed six years before that incident, under a mandate that names no anomaly at all. The original mandate speaks only of "the substrate beneath New Eridu" and the need to monitor it before the city above finished being built. Whoever wrote it already knew what was down there.`
+  },
+  {
+    id: "NE-TS-02",
+    title: "The Undercity Ledger",
+    brief: "Municipal maps of New Eridu are deliberately incomplete below the third sub-level.",
+    body: `Every district map issued to the public stops at the third sub-level of the transit spine. Bureau surveying teams maintain a separate, unpublished ledger that continues eleven levels further down. Three of those levels are inhabited — not by Bureau personnel, and not, according to the ledger's own notes, by anyone who agreed to be there. Cross-reference requests against this ledger require Level 6 sign-off, which has not been granted to a Level 5 operator in over a decade.`
+  },
+  {
+    id: "NE-TS-03",
+    title: "Ether Rationing, Unannounced",
+    brief: "The city's ambient Ether levels are actively suppressed, not naturally low.",
+    body: `Residents are told New Eridu sits on a naturally low-Ether bedrock, which is why Hollow activity here is rarer than in comparable cities. It is not naturally low. A ring of eleven suppression stations, disguised as transit substations, actively draws down ambient Ether across the city around the clock. Three have gone offline for maintenance in the Bureau's recorded history. Each time, Hollow-adjacent incident reports within a two-kilometer radius rose by a factor the Bureau has never published.`
+  },
+  {
+    id: "NE-TS-04",
+    title: "The Silent Ward",
+    brief: "A sixteenth city district was formally de-listed and does not appear on any current map.",
+    body: `Older municipal records reference a sixteenth ward, the Silent Ward, positioned where Signal Hill now stands. It was de-listed in a single administrative session with no public explanation, and every subsequent map has simply omitted it, as though the renumbering had always been that way. Bureau personnel who ask about it are redirected to a standard reply: "There is no Sixteenth Ward." No operator has been able to determine whether that reply is a cover story or simply the truth as the current Bureau understands it.`
+  },
+  {
+    id: "NE-TS-05",
+    title: "The Founders' Bargain",
+    brief: "The city's original planning committee made a documented agreement with an unnamed third party.",
+    body: `A single surviving memorandum from the city's original planning committee references an agreement made with an unnamed party, described only as "the counsel below," in exchange for the land New Eridu was built on remaining stable enough to build on at all. The terms are not recorded, only the fact that they were "honored annually." No Bureau audit has ever identified what the annual obligation is, who performs it, or whether it is still being met.`
+  },
+  {
+    id: "NE-TS-06",
+    title: "What Sleeps Below Signal Hill",
+    brief: "Signal Hill readings have never once reached zero, at any hour, in Bureau history.",
+    body: `Every other Ether monitoring post in New Eridu registers a true zero at least once a year, typically during scheduled suppression maintenance. Signal Hill has never recorded a zero reading, at any hour, since instrumentation began. The Bureau's official position is instrument drift. The unofficial position, held by most operators who've worked a rotation there, is that something under Signal Hill has been awake, and measured, for as long as anyone has been counting.`
+  }
+];
+
+function renderSecretList(){
+  const wrap = document.getElementById('secretList');
+  wrap.innerHTML = '';
+  TOP_SECRET.forEach(e=>{
+    const card = document.createElement('div');
+    card.className = 'scard';
+    card.onclick = ()=>openSecretDetail(e.id);
+    card.innerHTML = `
+      <div class="scard-id">${e.id}</div>
+      <div class="scard-title">${e.title}</div>
+      <div class="scard-brief">${e.brief}</div>`;
+    wrap.appendChild(card);
+  });
+}
+
+function openSecret(){
+  if(currentClearance < 5) return;
+  renderSecretList();
+  document.getElementById('secretList').style.display='flex';
+  document.getElementById('secretDetail').style.display='none';
+  document.getElementById('app').style.display='none';
+  document.getElementById('detail').style.display='none';
+  document.getElementById('secret').style.display='block';
+  window.scrollTo(0,0);
+}
+function closeSecret(){
+  document.getElementById('secret').style.display='none';
+  document.getElementById('app').style.display='block';
+}
+function openSecretDetail(id){
+  const e = TOP_SECRET.find(x=>x.id===id);
+  if(!e) return;
+  document.getElementById('sBody').innerHTML = `
+    <div class="section-label" style="color:var(--magenta);">${e.id}</div>
+    <div class="detail-title">${e.title}</div>
+    <div class="rule"></div>
+    <div>${e.body}</div>`;
+  document.getElementById('secretList').style.display='none';
+  document.getElementById('secretDetail').style.display='block';
+  window.scrollTo(0,0);
+}
+function closeSecretDetail(){
+  document.getElementById('secretDetail').style.display='none';
+  document.getElementById('secretList').style.display='flex';
+}
+
+/* ============================================================
+   LEVEL 9 — FULL OPERATOR ROSTER (fixed account only)
+   ============================================================ */
+function renderL9(){
+  const wrap = document.getElementById('l9List');
+  wrap.innerHTML = '';
+  VALID_CREDS.filter(c => c.clearance < 9).forEach(c=>{
+    const row = document.createElement('div');
+    row.className = 'l9row';
+    row.innerHTML = `
+      <div class="l9row-top">
+        <span class="l9row-user">${c.u}</span>
+        <span class="l9row-clearance">CLEARANCE ${c.clearance}</span>
+      </div>
+      <div class="l9row-role">${c.role}</div>
+      <div class="l9row-pass">ACCESS CODE: ${c.p}</div>`;
+    wrap.appendChild(row);
+  });
+}
+function openL9(){
+  if(currentClearance < 9) return;
+  renderL9();
+  document.getElementById('app').style.display='none';
+  document.getElementById('detail').style.display='none';
+  document.getElementById('secret').style.display='none';
+  document.getElementById('l9').style.display='block';
+  window.scrollTo(0,0);
+}
+function closeL9(){
+  document.getElementById('l9').style.display='none';
   document.getElementById('app').style.display='block';
 }
 
